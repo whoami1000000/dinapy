@@ -2,7 +2,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/functional.h>
 
-#include "lib/algo.h"
+#include "lib/dina.h"
 
 namespace py = pybind11;
 

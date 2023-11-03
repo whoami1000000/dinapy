@@ -2,7 +2,7 @@
 
 #include <boost/program_options.hpp>
 
-#include "lib/algo.h"
+#include "lib/dina.h"
 #include "version.h"
 
 int main(int argc, char** argv) {

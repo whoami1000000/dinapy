@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "lib/algo.h"
+#include "lib/dina.h"
 
 TEST(Algo, Add) {
   algo::Algorithms a{};
