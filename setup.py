@@ -76,7 +76,7 @@ with open('vcpkg.json', 'r') as vcpkg_file:
 
 setup(
     name='dinapy',
-    version=version,
+    version='1.0.48',
     author='Igor Kozlov',
     author_email='igorkozlov1992@gmail.com',
     description='A test project using pybind11 and CMake',
