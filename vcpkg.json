@@ -1,0 +1,36 @@
+{
+  "name": "dina",
+  "version-string": "1.0.44",
+  "builtin-baseline": "213c01f8719e0f8bd48ec6285074a22a7fe5e5a3",
+  "dependencies": [
+  ],
+  "features": {
+    "app": {
+      "description": "app",
+      "dependencies": [
+        {
+          "name": "boost-program-options",
+          "version>=": "1.83.0"
+        }
+      ]
+    },
+    "tests": {
+      "description": "tests",
+      "dependencies": [
+        {
+          "name": "gtest",
+          "version>=": "1.14.0"
+        }
+      ]
+    },
+    "py": {
+      "description": "py",
+      "dependencies": [
+        {
+          "name": "pybind11",
+          "version>=": "2.11.1"
+        }
+      ]
+    }
+  }
+}
