@@ -75,7 +75,7 @@ with open('vcpkg.json', 'r') as vcpkg_file:
     version = vcpkg_json['version-string']
 
 setup(
-    name='py',
+    name='dinapy',
     version=version,
     author='Igor Kozlov',
     author_email='igorkozlov1992@gmail.com',
