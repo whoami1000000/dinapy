@@ -1,5 +1,8 @@
 #include "dina.h"
 
+#include <iostream>
+#include <thread>
+
 extern "C" {
 void add(int a, int b, int* res);
 void sum_numbers(const int* numbers, std::size_t len, int* res);
@@ -34,6 +37,32 @@ std::map<char, int> Algorithms::group_by_symbol(std::string_view word) const {
     }
   }
   return result;
+}
+
+std::uint64_t factorial_inner(std::uint64_t n) {
+  if (n == 0 || n == 1) {
+    return 1;
+  }
+  return n * factorial_inner(n - 1);
+}
+
+std::uint64_t Algorithms::factorial(std::uint64_t n) const {
+  std::cout << "factorial(" << n
+            << ") started at thread=" << std::this_thread::get_id()
+            << std::endl;
+  std::this_thread::sleep_for(std::chrono::seconds{n});
+
+  auto res = factorial_inner(n);
+
+  std::cout << "factorial(" << n
+            << ") finished at thread=" << std::this_thread::get_id()
+            << " with result=" << res << std::endl;
+
+  return res;
+}
+
+Algorithms::~Algorithms() {
+  std::cout << "destroy\n";
 }
 
 }  // namespace algo

@@ -76,12 +76,12 @@ with open('vcpkg.json', 'r') as vcpkg_file:
 
 setup(
     name='dinapy',
-    version='1.0.48',
+    version=version,
     author='Igor Kozlov',
     author_email='igorkozlov1992@gmail.com',
     description='A test project using pybind11 and CMake',
     long_description='',
-    ext_modules=[CMakeExtension('py')],
+    ext_modules=[CMakeExtension('dinapy')],
     cmdclass={'build_ext': CMakeBuild},
     zip_safe=False,
     # extras_require={"test": ["pytest>=6.0"]},
