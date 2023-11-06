@@ -24,6 +24,13 @@ TEST(Algo, Factorial) {
   ASSERT_EQ(a.factorial(4), 24);
 }
 
+TEST(Algo, FactorialParallel) {
+  algo::Algorithms a{};
+  auto res = a.factorial_parallel({1, 2, 3, 4, 5});
+  decltype(res) expected{1, 2, 6, 24, 120};
+  ASSERT_EQ(res, expected);
+}
+
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

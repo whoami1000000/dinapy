@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <thread>
+#include <future>
 
 extern "C" {
 void add(int a, int b, int* res);
@@ -59,6 +60,23 @@ std::int64_t Algorithms::factorial(std::int64_t n) const {
 
 Algorithms::~Algorithms() {
   std::cout << "destroy\n";
+}
+std::vector<std::int64_t> Algorithms::factorial_parallel(const std::vector<std::int64_t>& values) {
+  std::vector<std::future<std::int64_t>> futures;
+  futures.reserve(values.size());
+
+  for (auto n : values) {
+    auto fut = std::async(std::launch::async, &Algorithms::factorial, this, n);
+    futures.push_back(std::move(fut));
+  }
+
+  std::vector<std::int64_t> results;
+  results.reserve(values.size());
+  for (auto& f : futures) {
+    results.push_back(f.get());
+  }
+
+  return results;
 }
 
 }  // namespace algo
