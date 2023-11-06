@@ -30,7 +30,8 @@ int Algorithms::sum(const std::vector<int>& numbers) const {
 std::map<char, int> Algorithms::group_by_symbol(std::string_view word) const {
   std::map<char, int> result{};
   for (char s : word) {
-    if (result.contains(s)) {
+    //if (result.contains(s)) {
+    if (result.find(s) != result.end()) {
       result[s]++;
     } else {
       result[s] = 1;
