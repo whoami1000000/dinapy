@@ -17,8 +17,8 @@ PYBIND11_MODULE(dinapy, m) {
       .def("factorial_no_gil", &algo::Algorithms::factorial,
            py::call_guard<py::gil_scoped_release>())
       .def("async_factorial", [](algo::Algorithms* self, std::uint64_t n,
-                                 std::function<void(std::uint64_t)> callback) {
-        std::uint64_t res{0};
+                                 std::function<void(std::int64_t)> callback) {
+        std::int64_t res{0};
         py::gil_scoped_release no_gil{};
         res = self->factorial(n);
         callback(res);

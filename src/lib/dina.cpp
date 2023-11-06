@@ -6,6 +6,7 @@
 extern "C" {
 void add(int a, int b, int* res);
 void sum_numbers(const int* numbers, std::size_t len, int* res);
+void factorial(std::int64_t n, std::int64_t* res);
 }
 
 namespace algo {
@@ -30,7 +31,7 @@ int Algorithms::sum(const std::vector<int>& numbers) const {
 std::map<char, int> Algorithms::group_by_symbol(std::string_view word) const {
   std::map<char, int> result{};
   for (char s : word) {
-    //if (result.contains(s)) {
+    // if (result.contains(s)) {
     if (result.find(s) != result.end()) {
       result[s]++;
     } else {
@@ -40,20 +41,14 @@ std::map<char, int> Algorithms::group_by_symbol(std::string_view word) const {
   return result;
 }
 
-std::uint64_t factorial_inner(std::uint64_t n) {
-  if (n == 0 || n == 1) {
-    return 1;
-  }
-  return n * factorial_inner(n - 1);
-}
-
-std::uint64_t Algorithms::factorial(std::uint64_t n) const {
+std::int64_t Algorithms::factorial(std::int64_t n) const {
   std::cout << "factorial(" << n
             << ") started at thread=" << std::this_thread::get_id()
             << std::endl;
   std::this_thread::sleep_for(std::chrono::seconds{n});
 
-  auto res = factorial_inner(n);
+  std::int64_t res{0};
+  ::factorial(n, &res);
 
   std::cout << "factorial(" << n
             << ") finished at thread=" << std::this_thread::get_id()
