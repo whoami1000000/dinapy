@@ -19,6 +19,11 @@ TEST(Algo, GroupBy) {
   ASSERT_EQ(res, expected);
 }
 
+TEST(Algo, Factorial) {
+  algo::Algorithms a{};
+  ASSERT_EQ(a.factorial(4), 24);
+}
+
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
