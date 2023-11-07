@@ -47,17 +47,22 @@ class CMakeBuild(build_ext):
             build_temp.mkdir(parents=True)
 
         vcpkg_path = os.path.join(ext.source_dir, 'vcpkg')
-        print(f'VCPKG PATH={vcpkg_path}')
         if not os.path.exists(vcpkg_path) or os.listdir(vcpkg_path) == 0:
-            if not os.path.exists(vcpkg_path):
-                os.mkdir(vcpkg_path)
-            subprocess.run(['git', 'init'], cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/microsoft/vcpkg'],
-                           cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'fetch', '--depth', '1', 'origin', commit], cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'checkout', 'FETCH_HEAD'], cwd=vcpkg_path, check=True)
+            print(f'{vcpkg_path} path does not exist or empty')
 
-            subprocess.run(['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1'],
+            if not os.path.exists(vcpkg_path):
+                print(f'creating {vcpkg_path} path')
+                os.mkdir(vcpkg_path)
+
+            print(f'cloning vcpkg...')
+
+            subprocess.run(['git', 'init'], cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/microsoft/vcpkg', '--verbose'],
+                           cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'fetch', '--depth', '1', 'origin', commit, '--verbose'], cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'checkout', 'FETCH_HEAD', '--verbose'], cwd=vcpkg_path, check=True)
+
+            subprocess.run(['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1', '--verbose'],
                            cwd=vcpkg_path, check=True)
 
         subprocess.run(
