@@ -17,6 +17,12 @@ class CMakeExtension(Extension):
         self.source_dir = os.fspath(Path(source_dir).resolve())
 
 
+with open('vcpkg.json', 'r') as vcpkg_file:
+    vcpkg_json = json.load(vcpkg_file)
+    version = vcpkg_json['version-string']
+    commit = vcpkg_json['builtin-baseline']
+
+
 class CMakeBuild(build_ext):
     def build_extension(self, ext: CMakeExtension) -> None:
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
@@ -40,9 +46,18 @@ class CMakeBuild(build_ext):
         if not build_temp.exists():
             build_temp.mkdir(parents=True)
 
-        subprocess.run(
-            ['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1'], cwd=ext.source_dir, check=True
-        )
+        vcpkg_path = os.path.join(ext.source_dir, 'vcpkg')
+        if not os.path.exists(vcpkg_path) or os.listdir(vcpkg_path) == 0:
+            if not os.path.exists(vcpkg_path):
+                os.mkdir(vcpkg_path)
+            subprocess.run(['git', 'init'], cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/microsoft/vcpkg'],
+                           cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'fetch', '--depth', '1', 'origin', commit], cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'checkout', 'FETCH_HEAD'], cwd=vcpkg_path, check=True)
+
+            subprocess.run(['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1'],
+                           cwd=vcpkg_path, check=True)
 
         subprocess.run(
             ['cmake', ext.source_dir, *cmake_args], cwd=build_temp, check=True
@@ -51,10 +66,6 @@ class CMakeBuild(build_ext):
             ['cmake', '--build', '.', *build_args], cwd=build_temp, check=True
         )
 
-
-with open('vcpkg.json', 'r') as vcpkg_file:
-    vcpkg_json = json.load(vcpkg_file)
-    version = vcpkg_json['version-string']
 
 setup(
     name='dinapy',
