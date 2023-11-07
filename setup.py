@@ -47,6 +47,7 @@ class CMakeBuild(build_ext):
             build_temp.mkdir(parents=True)
 
         vcpkg_path = os.path.join(ext.source_dir, 'vcpkg')
+        print(f'VCPKG PATH={vcpkg_path}')
         if not os.path.exists(vcpkg_path) or os.listdir(vcpkg_path) == 0:
             if not os.path.exists(vcpkg_path):
                 os.mkdir(vcpkg_path)
