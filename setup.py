@@ -48,7 +48,7 @@ class CMakeBuild(build_ext):
 
         vcpkg_path = os.path.join(ext.source_dir, 'vcpkg')
         print(f'vcpkg path is {vcpkg_path}')
-        if not os.path.exists(vcpkg_path) or os.listdir(vcpkg_path) == 0:
+        if not os.path.exists(vcpkg_path) or len(os.listdir(vcpkg_path)) == 0:
             print(f'{vcpkg_path} path does not exist or empty')
 
             if not os.path.exists(vcpkg_path):
