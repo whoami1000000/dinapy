@@ -25,10 +25,6 @@ class CMakeBuild(build_ext):
 
         cfg = 'Release'
 
-        # CMake lets you override the generator - we need to check this.
-        # Can be set with Conda-Build, for example.
-        cmake_generator = os.environ.get('CMAKE_GENERATOR', '')
-
         # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
         # EXAMPLE_VERSION_INFO shows you how to pass a value into the C++ code
         # from Python.
@@ -40,27 +36,13 @@ class CMakeBuild(build_ext):
         ]
         build_args = []
 
-        # if self.compiler.compiler_type != "msvc":
-        #     # Using Ninja-build since it a) is available as a wheel and b)
-        #     # multithreads automatically. MSVC would require all variables be
-        #     # exported for Ninja to pick it up, which is a little tricky to do.
-        #     # Users can override the generator with CMAKE_GENERATOR in CMake
-        #     # 3.15+.
-        #     if not cmake_generator or cmake_generator == "Ninja":
-        #         try:
-        #             import ninja
-        #
-        #             ninja_executable_path = Path(ninja.BIN_DIR) / "ninja"
-        #             cmake_args += [
-        #                 "-GNinja",
-        #                 f"-DCMAKE_MAKE_PROGRAM:FILEPATH={ninja_executable_path}",
-        #             ]
-        #         except ImportError:
-        #             pass
-
         build_temp = Path(self.build_temp) / ext.name
         if not build_temp.exists():
             build_temp.mkdir(parents=True)
+
+        subprocess.run(
+            ['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1'], cwd=ext.source_dir, check=True
+        )
 
         subprocess.run(
             ['cmake', ext.source_dir, *cmake_args], cwd=build_temp, check=True
