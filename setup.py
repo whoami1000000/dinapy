@@ -58,12 +58,12 @@ class CMakeBuild(build_ext):
             print(f'cloning vcpkg...')
 
             subprocess.run(['git', 'init'], cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/microsoft/vcpkg', '--verbose'],
+            subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/microsoft/vcpkg'],
                            cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'fetch', '--depth', '1', 'origin', commit, '--verbose'], cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'checkout', 'FETCH_HEAD', '--verbose'], cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'fetch', '--depth', '1', 'origin', commit], cwd=vcpkg_path, check=True)
+            subprocess.run(['git', 'checkout', 'FETCH_HEAD'], cwd=vcpkg_path, check=True)
 
-            subprocess.run(['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1', '--verbose'],
+            subprocess.run(['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1'],
                            cwd=vcpkg_path, check=True)
 
         subprocess.run(
