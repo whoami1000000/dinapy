@@ -24,6 +24,5 @@ PYBIND11_MODULE(dinapy, m) {
              res = self->factorial(n);
              callback(res);
            })
-      .def("factorial_parallel", &algo::Algorithms::factorial_parallel,
-           py::call_guard<py::gil_scoped_release>());
+      .def("factorial_parallel", &algo::Algorithms::factorial_parallel);
 }
