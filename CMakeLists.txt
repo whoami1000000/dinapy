@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
+set(VCPKG_BINARY_SOURCES "clear;x-gha,readwrite")
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_CXX_STANDARD 23)
