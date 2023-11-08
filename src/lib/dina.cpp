@@ -1,8 +1,9 @@
 #include "dina.h"
 
-#include <iostream>
-#include <thread>
 #include <future>
+#include <thread>
+
+#include "log/logging.h"
 
 extern "C" {
 void add(int a, int b, int* res);
@@ -43,24 +44,19 @@ std::map<char, int> Algorithms::group_by_symbol(std::string_view word) const {
 }
 
 std::int64_t Algorithms::factorial(std::int64_t n) const {
-  std::cout << "factorial(" << n
-            << ") started at thread=" << std::this_thread::get_id()
-            << std::endl;
+  auto tid = std::hash<std::thread::id>{}(std::this_thread::get_id());
+  spdlog::debug("factorial({}) started at [thread={}]", n, tid);
+
   std::this_thread::sleep_for(std::chrono::seconds{n});
 
   std::int64_t res{0};
   ::factorial(n, &res);
 
-  std::cout << "factorial(" << n
-            << ") finished at thread=" << std::this_thread::get_id()
-            << " with result=" << res << std::endl;
+  spdlog::debug("factorial({}) finished at [thread={}] with [result={}]", n, tid, res);
 
   return res;
 }
 
-Algorithms::~Algorithms() {
-  std::cout << "destroy\n";
-}
 std::vector<std::int64_t> Algorithms::factorial_parallel(const std::vector<std::int64_t>& values) {
   std::vector<std::future<std::int64_t>> futures;
   futures.reserve(values.size());

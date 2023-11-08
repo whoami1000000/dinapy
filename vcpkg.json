@@ -1,8 +1,12 @@
 {
   "name": "dina",
-  "version-string": "1.0.67",
+  "version-string": "1.0.68",
   "builtin-baseline": "213c01f8719e0f8bd48ec6285074a22a7fe5e5a3",
   "dependencies": [
+    {
+      "name": "spdlog",
+      "version>=": "1.12.0"
+    }
   ],
   "features": {
     "app": {
