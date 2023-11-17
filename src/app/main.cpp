@@ -16,8 +16,8 @@ int main(int argc, char** argv) {
       .positional_help("Simple app to demonstrate CICD, debian package building and versioning")  //
       .show_positional_help();                                                                    //
 
-  options.add_options()                 //
-      ("help,h", "Prints help")         //
+  options.add_options()                //
+      ("help,h", "Prints help")        //
       ("version,v", "Prints version")  //
       ("log", "Log file path prefix", cxxopts::value<std::string>());
 
@@ -40,5 +40,16 @@ int main(int argc, char** argv) {
 
   algo::Algorithms a{};
   spdlog::debug("{} + {} = {}", 2, 2, a.add(2, 2));
+
+  std::vector<int> numbers{1, 2, 3, 4};
+  int sum = a.sum(numbers);
+  spdlog::debug("sum of numbers = {}", sum);
+
+  //  a.factorial_async(5, [](auto res) { spdlog::debug("factorial_async({})={}", 5, res); });
+  //  a.factorial_async(6, [](auto res) { spdlog::debug("factorial_async({})={}", 6, res); });
+  //  a.factorial_async(7, [](auto res) { spdlog::debug("factorial_async({})={}", 7, res); });
+  //
+  //  std::this_thread::sleep_for(std::chrono::seconds{10});
+
   return 0;
 }

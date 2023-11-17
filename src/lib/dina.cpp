@@ -75,4 +75,13 @@ std::vector<std::int64_t> Algorithms::factorial_parallel(const std::vector<std::
   return results;
 }
 
+void Algorithms::factorial_async(std::int64_t n, std::function<void(std::int64_t)> callback) {
+  auto f = [this, n, callback = std::move(callback)]() {
+    auto res = factorial(n);
+    callback(res);
+  };
+
+  std::thread{std::move(f)}.detach();
+}
+
 }  // namespace algo

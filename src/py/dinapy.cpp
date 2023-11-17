@@ -42,5 +42,6 @@ PYBIND11_MODULE(dinapy, m) {
              res = self->factorial(n);
              callback(res);
            })
-      .def("factorial_parallel", &algo::Algorithms::factorial_parallel);
+      .def("factorial_parallel", &algo::Algorithms::factorial_parallel)
+      .def("factorial_async", &algo::Algorithms::factorial_async);
 }
