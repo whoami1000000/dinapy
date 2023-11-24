@@ -1,6 +1,6 @@
 {
   "name": "dina",
-  "version-string": "1.0.70",
+  "version-string": "1.0.72",
   "builtin-baseline": "213c01f8719e0f8bd48ec6285074a22a7fe5e5a3",
   "dependencies": [
     {
@@ -24,15 +24,6 @@
         {
           "name": "gtest",
           "version>=": "1.14.0"
-        }
-      ]
-    },
-    "py": {
-      "description": "py",
-      "dependencies": [
-        {
-          "name": "pybind11",
-          "version>=": "2.11.1"
         }
       ]
     }

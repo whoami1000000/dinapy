@@ -23,13 +23,30 @@ with open('vcpkg.json', 'r') as vcpkg_file:
     commit = vcpkg_json['builtin-baseline']
 
 
+def update_submodule(path, url, commit_or_tag):
+    if not os.path.exists(path) or len(os.listdir(path)) == 0:
+        print(f'{path} path does not exist or empty')
+
+    if not os.path.exists(path):
+        print(f'creating {path} path')
+        os.mkdir(path)
+
+    print(f'cloning vcpkg...')
+
+    subprocess.run(['git', 'init'], cwd=path, check=True)
+    subprocess.run(['git', 'remote', 'add', 'origin', url], cwd=path, check=True)
+    subprocess.run(['git', 'fetch', '--depth', '1', 'origin', commit_or_tag], cwd=path, check=True)
+    subprocess.run(['git', 'checkout', 'FETCH_HEAD'], cwd=path, check=True)
+    subprocess.run(['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1'], cwd=path, check=True)
+
+
 class CMakeBuild(build_ext):
     def build_extension(self, ext: CMakeExtension) -> None:
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
         ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)
         ext_dir = ext_fullpath.parent.resolve()
 
-        cfg = 'Release'
+        cfg = 'Debug'
 
         # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
         # EXAMPLE_VERSION_INFO shows you how to pass a value into the C++ code
@@ -48,23 +65,10 @@ class CMakeBuild(build_ext):
 
         vcpkg_path = os.path.join(ext.source_dir, 'vcpkg')
         print(f'vcpkg path is {vcpkg_path}')
-        if not os.path.exists(vcpkg_path) or len(os.listdir(vcpkg_path)) == 0:
-            print(f'{vcpkg_path} path does not exist or empty')
+        update_submodule(path=vcpkg_path, url='https://github.com/microsoft/vcpkg', commit_or_tag=commit)
 
-            if not os.path.exists(vcpkg_path):
-                print(f'creating {vcpkg_path} path')
-                os.mkdir(vcpkg_path)
-
-            print(f'cloning vcpkg...')
-
-            subprocess.run(['git', 'init'], cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'remote', 'add', 'origin', 'https://github.com/microsoft/vcpkg'],
-                           cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'fetch', '--depth', '1', 'origin', commit], cwd=vcpkg_path, check=True)
-            subprocess.run(['git', 'checkout', 'FETCH_HEAD'], cwd=vcpkg_path, check=True)
-
-            subprocess.run(['git', 'submodule', 'update', '--init', '--recursive', '--depth', '1'],
-                           cwd=vcpkg_path, check=True)
+        pybind11_path = os.path.join(ext.source_dir, 'src', 'py', 'pybind11')
+        update_submodule(path=pybind11_path, url='https://github.com/pybind/pybind11', commit_or_tag='v2.11.1')
 
         subprocess.run(
             ['cmake', ext.source_dir, *cmake_args], cwd=build_temp, check=True

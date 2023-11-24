@@ -1,3 +1,6 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg
+[submodule "src/py/pybind11"]
+	path = src/py/pybind11
+	url = https://github.com/pybind/pybind11

@@ -25,6 +25,11 @@ PYBIND11_MODULE(dinapy, m) {
         py::arg("log_file_prefix") = std::string_view{},       //
         py::arg("level") = spdlog::level::level_enum::debug);  //
 
+  py::class_<algo::FactorialResult>(m, "FactorialResult")
+      .def_readonly("n", &algo::FactorialResult::n)
+      .def_readonly("result", &algo::FactorialResult::result)
+      .def_readonly("comment", &algo::FactorialResult::comment);
+
   py::class_<algo::Algorithms>(m, "Algorithms")
       .def(py::init())
       .def("add", &algo::Algorithms::add)
@@ -35,13 +40,6 @@ PYBIND11_MODULE(dinapy, m) {
       .def("factorial_no_gil",
            &algo::Algorithms::factorial,
            py::call_guard<py::gil_scoped_release>())
-      .def("async_factorial",
-           [](algo::Algorithms* self, std::int64_t n, std::function<void(std::int64_t)> callback) {
-             std::int64_t res{0};
-             py::gil_scoped_release no_gil{};
-             res = self->factorial(n);
-             callback(res);
-           })
       .def("factorial_parallel", &algo::Algorithms::factorial_parallel)
       .def("factorial_async", &algo::Algorithms::factorial_async);
 }
