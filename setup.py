@@ -31,7 +31,7 @@ def update_submodule(path, url, commit_or_tag):
         print(f'creating {path} path')
         os.mkdir(path)
 
-    print(f'cloning vcpkg...')
+    print(f'cloning {url}...')
 
     subprocess.run(['git', 'init'], cwd=path, check=True)
     subprocess.run(['git', 'remote', 'add', 'origin', url], cwd=path, check=True)
@@ -64,7 +64,6 @@ class CMakeBuild(build_ext):
             build_temp.mkdir(parents=True)
 
         vcpkg_path = os.path.join(ext.source_dir, 'vcpkg')
-        print(f'vcpkg path is {vcpkg_path}')
         update_submodule(path=vcpkg_path, url='https://github.com/microsoft/vcpkg', commit_or_tag=commit)
 
         pybind11_path = os.path.join(ext.source_dir, 'src', 'py', 'pybind11')
